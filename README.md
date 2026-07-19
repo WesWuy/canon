@@ -21,7 +21,7 @@ pipeline/          Python: fetch -> parse -> normalize -> SQLite FTS5
 data/raw/          cached source downloads (gitignored)
 data/build/        corpus.jsonl + canon.db (gitignored)
 app/               Vite + React + TS + Tailwind search UI
-  public/canon.db  the database, fetched chunk-wise by sql.js-httpvfs
+  public/canon.db.000  the database (single chunk), fetched via HTTP ranges
 ```
 
 Every verse is normalized to one schema:
@@ -37,7 +37,7 @@ Every verse is normalized to one schema:
 ```sh
 # rebuild the corpus database (first run downloads sources into data/raw)
 python pipeline/run.py
-cp data/build/canon.db app/public/canon.db
+cp data/build/canon.db app/public/canon.db.000
 
 # app
 cd app

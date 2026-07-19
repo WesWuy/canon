@@ -2,9 +2,9 @@
 data/raw/
 data/build/
 
-# app/public/canon.db IS committed: it ships with the app so CI can deploy
+# app/public/canon.db.000 IS committed: it ships with the app so CI can deploy
 # without re-crawling sources. Refresh via `python pipeline/run.py && cp
-# data/build/canon.db app/public/canon.db`.
+# data/build/canon.db app/public/canon.db.000`.
 
 node_modules/
 app/dist/
