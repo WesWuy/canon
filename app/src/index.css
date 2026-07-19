@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+
+mark {
+  border-radius: 0.125rem;
+  background: var(--color-amber-200);
+  color: var(--color-amber-950);
+  padding: 0 0.125rem;
+}

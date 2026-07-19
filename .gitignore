@@ -1,0 +1,11 @@
+# cached source downloads and build artifacts — regenerate with pipeline/run.py
+data/raw/
+data/build/
+
+# the db ships to the app via `cp data/build/canon.db app/public/canon.db`
+app/public/canon.db
+
+node_modules/
+app/dist/
+__pycache__/
+.env
