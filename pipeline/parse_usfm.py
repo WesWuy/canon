@@ -18,7 +18,7 @@ from common import Verse
 _FOOTNOTE_RE = re.compile(r"\\f\s.*?\\f\*", re.DOTALL)
 _XREF_RE = re.compile(r"\\x\s.*?\\x\*", re.DOTALL)
 _WORD_RE = re.compile(r"\\\+?w\s([^|\\]*)(?:\|[^\\]*)?\\\+?w\*")
-_CHAR_PAIRED_RE = re.compile(r"\\\+?(wj|add|nd|qt|sls|tl|em|bd|it|bdit|sc)\s(.*?)\\\+?\1\*", re.DOTALL)
+_CHAR_PAIRED_RE = re.compile(r"\\\+?(wj|add|nd|qt|sls|tl|em|bd|it|bdit|sc|qs|k|bk|pn)\s(.*?)\\\+?\1\*", re.DOTALL)
 _LEFTOVER_MARKER_RE = re.compile(r"\\[a-z0-9]+\*?")
 _WS_RE = re.compile(r"\s+")
 
@@ -88,8 +88,10 @@ def parse_usfm(
             cur_text = [m.group(3)]
         elif marker in ("\\id", "\\ide", "\\h", "\\toc1", "\\toc2", "\\toc3",
                         "\\mt1", "\\mt2", "\\mt3", "\\s1", "\\s2", "\\r", "\\d",
-                        "\\rem", "\\sts", "\\cl", "\\cp"):
-            continue  # headings/metadata: never verse text
+                        "\\rem", "\\sts", "\\cl", "\\cp", "\\ms1", "\\ms2",
+                        "\\ms3", "\\mr", "\\sr", "\\sp", "\\qa", "\\qd",
+                        "\\is1", "\\is2", "\\ip", "\\im", "\\io1", "\\io2"):
+            continue  # headings/intros/metadata: never verse text
         else:
             # paragraph-level marker (\p, \q1, \m, \pi, \b ...): keep trailing text
             if cur_verse is not None and rest:

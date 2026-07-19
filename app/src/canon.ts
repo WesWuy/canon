@@ -16,6 +16,14 @@ export interface Book {
   translation: string
   aliases: string[]
   traditions: string[]
+  max_chapter: number
+}
+
+export const COLLECTIONS: Record<string, string> = {
+  ot: 'Old Testament',
+  deuterocanon: 'Deuterocanon / Apocrypha',
+  nt: 'New Testament',
+  ot_pseudepigrapha: 'OT Pseudepigrapha',
 }
 
 export interface SearchHit {
@@ -44,10 +52,13 @@ export async function loadBooks(): Promise<Book[]> {
     translation: string
     aliases: string
     traditions: string
+    max_chapter: number
   }>(
     `SELECT b.book_id, b.book_title, b.collection, b.translation, b.aliases,
             (SELECT group_concat(t.tradition) FROM book_traditions t
-              WHERE t.book_id = b.book_id) AS traditions
+              WHERE t.book_id = b.book_id) AS traditions,
+            (SELECT max(v.chapter) FROM verses v
+              WHERE v.book_id = b.book_id) AS max_chapter
        FROM books b ORDER BY b.sort_order`,
   )
   return rows.map((r) => ({
@@ -134,24 +145,38 @@ export interface Reference {
   verse: number | null
 }
 
-/** Parse a direct reference like "1 Enoch 14:8", "Jude 5", "1en 14". */
+/** Parse a direct reference like "1 Enoch 14:8", "Jude 5", "Psalm 151 5".
+ *
+ * Matches the longest book name/alias prefix, then reads "C", "C:V", or
+ * "C.V" from the remainder. A bare number on a single-chapter book is a
+ * verse ("Jude 5" -> 1:5). Bare book names are NOT references — they fall
+ * through to full-text search. */
 export function parseReference(input: string, books: Book[]): Reference | null {
-  const m = input
-    .trim()
-    .match(/^(\d?\s*[\p{L}’' .]+?)\s*(\d+)(?:\s*[:.]\s*(\d+))?$/u)
-  if (!m) return null
-  const name = m[1].trim().toLowerCase().replace(/\s+/g, ' ')
-  const book = books.find(
-    (b) =>
-      b.book_title.toLowerCase() === name ||
-      b.aliases.some((a) => a.toLowerCase() === name),
-  )
-  if (!book) return null
-  return {
-    book,
-    chapter: parseInt(m[2], 10),
-    verse: m[3] ? parseInt(m[3], 10) : null,
+  const q = input.trim().toLowerCase().replace(/\s+/g, ' ')
+  const candidates: { book: Book; name: string }[] = []
+  for (const book of books) {
+    for (const name of [book.book_title.toLowerCase(), ...book.aliases]) {
+      if (
+        q.startsWith(name) &&
+        (q.length === name.length || /[\s:.]/.test(q[name.length]))
+      ) {
+        candidates.push({ book, name })
+      }
+    }
   }
+  if (!candidates.length) return null
+  const { book, name } = candidates.sort(
+    (a, b) => b.name.length - a.name.length,
+  )[0]
+  const rest = q.slice(name.length).trim()
+  const m = rest.match(/^(\d+)(?:\s*[:.]\s*(\d+))?$/)
+  if (!m) return null
+  const first = parseInt(m[1], 10)
+  const second = m[2] ? parseInt(m[2], 10) : null
+  if (second === null && book.max_chapter === 1) {
+    return { book, chapter: 1, verse: first }
+  }
+  return { book, chapter: first, verse: second }
 }
 
 export async function lookupReference(ref: Reference): Promise<VerseRow[]> {

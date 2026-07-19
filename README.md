@@ -6,7 +6,7 @@ OT pseudepigrapha, and NT apocrypha — using only public domain English
 translations. No backend: the SQLite database is served statically and
 queried in the browser via HTTP range requests.
 
-**v1 test corpus** (pipeline proof): Jude (WEB) + 1 Enoch (R.H. Charles 1917).
+**Corpus**: all 81 World English Bible books (Protestant OT/NT + full Deuterocanon/Apocrypha) plus 1 Enoch (R.H. Charles 1917) — 82 books, ~39,000 verses.
 See [CORPUS.md](CORPUS.md) for sources and licensing.
 
 ## Architecture

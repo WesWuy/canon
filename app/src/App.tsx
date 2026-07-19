@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
+  COLLECTIONS,
   TRADITIONS,
   loadBooks,
   lookupReference,
@@ -147,7 +148,7 @@ export default function App() {
             Full-text search across biblical &amp; parabiblical literature. Try
             a keyword (<em>watchers</em>), a phrase (
             <em>&quot;clouds invited me&quot;</em>), or a reference (
-            <em>1 Enoch 14:8</em>).
+            <em>John 3:16</em>, <em>1 Enoch 14:8</em>).
           </p>
         </header>
 
@@ -195,11 +196,18 @@ export default function App() {
             className="ml-auto rounded-lg border border-stone-300 bg-white px-3 py-1.5 text-sm"
           >
             <option value="">All books</option>
-            {visibleBooks.map((b) => (
-              <option key={b.book_id} value={b.book_id}>
-                {b.book_title}
-              </option>
-            ))}
+            {Object.entries(COLLECTIONS).map(([coll, label]) => {
+              const group = visibleBooks.filter((b) => b.collection === coll)
+              return group.length ? (
+                <optgroup key={coll} label={label}>
+                  {group.map((b) => (
+                    <option key={b.book_id} value={b.book_id}>
+                      {b.book_title}
+                    </option>
+                  ))}
+                </optgroup>
+              ) : null
+            })}
           </select>
         </div>
 
@@ -258,8 +266,16 @@ export default function App() {
         )}
 
         <footer className="mt-12 border-t border-stone-200 pt-4 text-sm text-stone-400">
-          v1 test corpus: Jude (WEB) · 1 Enoch (R.H. Charles, 1917). All texts
-          public domain — see CORPUS.md.
+          {books.length ? `${books.length} books · ` : ''}World English Bible
+          (OT · Deuterocanon · NT) and R.H. Charles' 1 Enoch (1917). All texts
+          public domain —{' '}
+          <a
+            className="underline hover:text-stone-600"
+            href="https://github.com/WesWuy/canon/blob/main/CORPUS.md"
+          >
+            corpus manifest
+          </a>
+          .
         </footer>
       </div>
     </div>
