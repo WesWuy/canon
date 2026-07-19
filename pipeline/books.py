@@ -152,6 +152,19 @@ def registry() -> list[dict]:
             "sort_order": 100,
         }
     )
+    books.append(
+        {
+            "book_id": "JUB",
+            "book_title": "Jubilees",
+            "collection": "ot_pseudepigrapha",
+            "translation": "R.H. Charles (1902)",
+            "traditions": ["ethiopian", "pseudepigrapha"],
+            "source_url": "https://sacred-texts.com/bib/jub/",
+            "license": "Public domain (published 1902, Oxford; pre-1930)",
+            "aliases": ["jubilees", "jub", "book of jubilees", "little genesis"],
+            "sort_order": 101,
+        }
+    )
     return books
 
 

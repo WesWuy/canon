@@ -6,7 +6,7 @@ OT pseudepigrapha, and NT apocrypha — using only public domain English
 translations. No backend: the SQLite database is served statically and
 queried in the browser via HTTP range requests.
 
-**Corpus**: all 81 World English Bible books (Protestant OT/NT + full Deuterocanon/Apocrypha) plus 1 Enoch (R.H. Charles 1917) — 82 books, ~39,000 verses.
+**Corpus**: all 81 World English Bible books (Protestant OT/NT + full Deuterocanon/Apocrypha) plus 1 Enoch and Jubilees (R.H. Charles) — 83 books, ~40,000 verses.
 See [CORPUS.md](CORPUS.md) for sources and licensing.
 
 ## Architecture
@@ -17,6 +17,7 @@ pipeline/          Python: fetch -> parse -> normalize -> SQLite FTS5
   common.py        Verse schema, cached fetching
   parse_usfm.py    USFM parser (ebible.org downloads)
   parse_enoch.py   1 Enoch parser (sacred-texts.com, Charles 1917)
+  parse_jubilees.py Jubilees parser (sacred-texts.com, Charles 1902)
   build_db.py      SQLite schema + FTS5 index build
 data/raw/          cached source downloads (gitignored)
 data/build/        corpus.jsonl + canon.db (gitignored)

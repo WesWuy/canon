@@ -15,7 +15,13 @@ from books import ESG_ALT_VERSIFICATION, registry
 from build_db import build_db
 from common import BUILD_DIR, RAW_DIR, write_jsonl
 from parse_enoch import parse_enoch
+from parse_jubilees import parse_jubilees
 from parse_usfm import parse_usfm
+
+SPECIAL_PARSERS = {
+    "1EN": parse_enoch,
+    "JUB": parse_jubilees,
+}
 
 USFM_DIR = RAW_DIR / "ebible" / "eng-web_usfm"
 
@@ -31,8 +37,8 @@ def main() -> None:
     books = registry()
     all_verses = []
     for meta in books:
-        if meta["book_id"] == "1EN":
-            verses = parse_enoch()
+        if meta["book_id"] in SPECIAL_PARSERS:
+            verses = SPECIAL_PARSERS[meta["book_id"]]()
         else:
             verses = parse_usfm(
                 usfm_path(meta["usfm_prefix"]),

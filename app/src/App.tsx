@@ -267,8 +267,8 @@ export default function App() {
 
         <footer className="mt-12 border-t border-stone-200 pt-4 text-sm text-stone-400">
           {books.length ? `${books.length} books · ` : ''}World English Bible
-          (OT · Deuterocanon · NT) and R.H. Charles' 1 Enoch (1917). All texts
-          public domain —{' '}
+          (OT · Deuterocanon · NT) and R.H. Charles' 1 Enoch (1917) &amp;
+          Jubilees (1902). All texts public domain —{' '}
           <a
             className="underline hover:text-stone-600"
             href="https://github.com/WesWuy/canon/blob/main/CORPUS.md"

@@ -10,6 +10,7 @@ justification. Regenerate the database with `python pipeline/run.py`
 |--------|-------|-------------|------------------|
 | [ebible.org eng-web USFM](https://ebible.org/Scriptures/eng-web_usfm.zip) | 81 (OT 39, Deuterocanon/Apocrypha 15, NT 27) | World English Bible (WEB) | The WEB is expressly dedicated to the public domain by its producers ("The World English Bible is not copyrighted") |
 | [sacred-texts.com/bib/boe](https://sacred-texts.com/bib/boe/) | 1 Enoch | R.H. Charles (1917) | Published 1917 (SPCK, London); pre-1930 publication, public domain in the US. Charles' own revision of his translation in *Apocrypha and Pseudepigrapha of the Old Testament* vol. 2 (Oxford, 1913), also public domain |
+| [sacred-texts.com/bib/jub](https://sacred-texts.com/bib/jub/) | Jubilees | R.H. Charles (1902) | Published 1902 (A. & C. Black, Oxford); pre-1930 publication, public domain in the US |
 
 ## Tradition tags
 
@@ -21,7 +22,7 @@ the books we have; their canon differs structurally (e.g. Jubilees and
 1 Enoch are canonical; Meqabyan replaces Maccabees) and several of its books
 have no public domain English translation (see "Pending" below).
 
-## Included books (82)
+## Included books (83)
 
 | Book | ID | Collection | Traditions |
 |------|----|-----------|------------|
@@ -107,6 +108,7 @@ have no public domain English translation (see "Pending" below).
 | Jude | `JUD` | New Testament | Protestant, Catholic, Orthodox, Ethiopian |
 | Revelation | `REV` | New Testament | Protestant, Catholic, Orthodox, Ethiopian |
 | 1 Enoch | `1EN` | OT Pseudepigrapha | Ethiopian, Pseudepigrapha |
+| Jubilees | `JUB` | OT Pseudepigrapha | Ethiopian, Pseudepigrapha |
 
 ## Versification notes
 
@@ -140,6 +142,23 @@ have no public domain English translation (see "Pending" below).
 - Charles' critical sigla (⌈⌉ emendation brackets, daggers) are stripped;
   his round and square interpolation brackets are retained.
 
+## Jubilees source notes (Charles 1902 via sacred-texts)
+
+- Verse ranges are announced per page, usually inside the page's own `<h3>`
+  heading (e.g. "God's Covenant with Abram (xiv. 1-20; cf. Gen. xv.)."); a
+  few pages give that range in lowercase roman numerals instead of arabic
+  (e.g. "(xx. i-ii)" for chapter 20 verses 1–2) — the parser accepts either.
+- **Every chapter-opening page except the very first** (chapter i) marks
+  verse 1 with the chapter's own uppercase roman numeral instead of "1."
+  — e.g. chapter 2 opens "II. And the angel of the presence spake..." —
+  apparently a typographic convention from the original edition, carried
+  through by the transcription. `pipeline/parse_jubilees.py` detects and
+  strips this marker before the normal verse split runs.
+- Anno Mundi calendar dates, printed in a right-aligned margin table next
+  to the verse they annotate, are stripped (they're a dating gloss, not
+  verse text).
+- 1,292 verses parsed across all 50 chapters, no gaps.
+
 ## Pending, no public domain source
 
 | Book | Traditions | Status |
@@ -150,8 +169,6 @@ have no public domain English translation (see "Pending" below).
 
 ## Planned next (PD sources identified, not yet ingested)
 
-- **Jubilees** (Ethiopian canon; OT pseudepigrapha) — R.H. Charles (1902/1913),
-  sacred-texts.com `bib/jub`.
 - **Other OT Pseudepigrapha** (Testaments of the Twelve Patriarchs, Letter of
   Aristeas, 2 Baruch, etc.) — R.H. Charles, *Apocrypha and Pseudepigrapha of
   the Old Testament* (Oxford, 1913), public domain.
